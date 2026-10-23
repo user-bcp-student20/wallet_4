@@ -54,9 +54,10 @@ La meta de producto es reducir la mediana de finalización del onboarding de 8 a
 
 El prototipo no consulta el mock, no persiste datos, no verifica identidades, no genera eventos analíticos y no ejecuta pagos. Los movimientos de la pantalla de bienvenida son ejemplos ficticios y no afectan el saldo.
 
+
 ## Probar la demo
 
-La demo usa dos puertos distintos: el backend de referencia en `8089` y el servidor estático del frontend en `8090`. El frontend actual es un HTML independiente y no consume el backend.
+La demo contiene tres componentes independientes: el backend de referencia en `8089`, el dashboard Angular en `4200` y el prototipo W1 estático en `8090`. Las interfaces no están conectadas al backend ni entre sí.
 
 ### Backend Quarkus
 
@@ -70,15 +71,27 @@ $env:HTTP_PORT = "8089"
 
 El endpoint de salud está en `http://localhost:8089/health` y Swagger UI en `http://localhost:8089/q/swagger-ui`. Solo el endpoint de salud está implementado en el backend actual; las operaciones de negocio aún no están disponibles.
 
-### Frontend estático
+### Dashboard Angular
 
-En otra terminal, desde la raíz del repositorio:
+En otra terminal:
+
+```powershell
+cd frontend
+npm ci
+npm start
+```
+
+Abre `http://localhost:4200`. Este dashboard es una demostración independiente.
+
+### Prototipo W1 estático
+
+Desde la raíz del repositorio, en otra terminal:
 
 ```powershell
 py -m http.server 8090
 ```
 
-Abre `http://localhost:8090/index_W1.html` en el navegador. El HTML también se puede abrir directamente como archivo, sin iniciar un servidor. No uses `8089` para ambos procesos: un puerto solo puede ser ocupado por un servidor a la vez.
+Abre `http://localhost:8090/index_W1.html`. También puedes abrir `index_W1.html` directamente como archivo, sin iniciar este servidor.
 
 Usa únicamente datos ficticios y un identificador `TEST-`; no ingreses DNI, datos personales reales ni credenciales utilizadas en otros servicios.
 
@@ -128,7 +141,7 @@ curl 'https://bcp-wallet-mock.yefri.workers.dev/groups/4/wallets/wallet-demo' -H
 
 | Carpeta | Cobertura |
 | --- | --- |
-| 01 - Servicio y preparación | Salud, escenarios, OpenAPI, grupos y saldo inicial |
+| 01 - Servicio y preparación | escenarios, OpenAPI, grupos y saldo inicial |
 | 02 - KYC y onboarding | Aprobación, rechazo, revisión manual, proveedor no disponible, decisiones y wallets sin fondos |
 | 03 - Pagos e idempotencia | Aprobación, rechazo, claves repetidas, conflictos, callbacks duplicados, historial, comprobantes y entradas inválidas |
 | 04 - Pendientes timeout y callbacks | Pendientes, aprobación demorada, timeout tras procesar, reintentos, resolución y escalamiento |
@@ -208,3 +221,15 @@ git push -u origin HEAD
 Si la rama propia ya existe y es la actual, ejecutar solo `git push -u origin HEAD`.
 
 Después del push, abrir un Pull Request en GitHub desde la rama publicada hacia `main`. Incluir un título descriptivo, resumen de cambios, pruebas realizadas y riesgos o validaciones pendientes. No hacer push directo a `main`.
+
+## Equipo
+
+| Rol | Integrante | Contribución |
+| --- | --- | --- |
+| Product Owner | Por confirmar | Prioriza el alcance W1 y define sus criterios de aceptación. |
+| Arquitectura | Por confirmar | Define componentes, límites, mocks y decisiones técnicas. |
+| AI Engineer | Por confirmar | Aplica y revisa herramientas de IA durante el desarrollo. |
+| QA y seguridad | Por confirmar | Valida el flujo, los casos de error y el uso de datos sintéticos. |
+| Presentación y control de tiempo | Por confirmar | Prepara la demo, la evidencia y la exposición. |
+
+Los roles pueden combinarse entre integrantes. Completar los nombres y contribuciones reales del equipo antes de la entrega.
