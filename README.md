@@ -2,7 +2,7 @@
 
 Una propuesta de wallet digital pensada para que las personas puedan empezar con claridad: entender el registro, corregir sus datos y saber cuándo su cuenta está lista para acceder a pagos.
 
-> **Estado de la propuesta:** prototipo de hackatón. Las pantallas son demostrativas; no se crea una cuenta real, no se conecta con bancos y no se procesan pagos.
+> **Estado de la demo:** se presentará el dashboard Angular de `frontend/`, con datos ficticios. No se crean cuentas reales, no se conecta con bancos y no se procesan pagos. El dashboard no incluye todavía el formulario de onboarding W1.
 
 ## La propuesta
 
@@ -14,31 +14,21 @@ La propuesta responde a necesidades concretas:
 - Entender el estado de la cuenta y cuál es el siguiente paso.
 - Llegar al flujo de pagos con expectativas claras.
 
-## Recorrido propuesto
+## Alcance W1
 
-El flujo funcional descrito en [DiagramaOnBoarding_Pago.md](DiagramaOnBoarding_Pago.md) conecta el registro con un pago QR:
+W1 busca guiar el registro, validar los datos ingresados y explicar el siguiente paso según el estado de la cuenta. El flujo KYC y sus estados se detallan en [DiagramaOnBoarding_Pago.md](DiagramaOnBoarding_Pago.md) como experiencia objetivo.
 
-1. La persona inicia el registro y envía sus datos para verificación.
-2. Si el resultado KYC es `ACTIVE`, la wallet queda habilitada. Si queda `PENDING`, se crea un caso para revisión; si es `REJECTED`, no se habilita el acceso a pagos.
-3. Con la wallet activa, la persona escanea un QR. La aplicación valida que sea válido y esté vigente; si no, informa el error sin crear un pago.
-4. Antes de enviar el pago, muestra el comercio y el monto para que la persona confirme o cancele.
-5. Al confirmar, se envía el pago con una clave de idempotencia. El resultado puede ser exitoso, rechazado o quedar pendiente; los resultados pendientes o inciertos se consultan sobre el mismo pago.
+La demo que se presentará es el dashboard Angular posterior al inicio de sesión; no incluye todavía el registro ni la consulta de KYC. El pago QR descrito en el diagrama queda fuera de la demo actual.
 
-Este diagrama describe la experiencia objetivo del MVP. El [diagrama de arquitectura](arquitectura-w1-w2.svg) refleja el plan técnico por etapas y marca W2 como futura; no implica que el pago QR esté conectado en la demo actual. La demo visual disponible cubre únicamente pantallas de W1.
+## Pantalla de la demo
 
-## Pantallas del prototipo
+El dashboard Angular presenta el saldo de ejemplo, accesos rápidos y movimientos ficticios.
 
-La pantalla de registro muestra los campos de demostración y las validaciones locales.
-
-![Pantalla de registro del prototipo Wallet W1](w1-registro.png)
-
-La bienvenida muestra una wallet de ejemplo, saldo cero y movimientos ficticios, identificados expresamente como demostración.
-
-![Pantalla de bienvenida del prototipo Wallet W1](w1-bienvenida.png)
+![Dashboard Angular de demostración](frontend-dashboard.png)
 
 ## Arquitectura de referencia
 
-El diagrama presenta la arquitectura de referencia, con W1 como alcance actual y W2 como siguiente etapa técnica. Para el detalle funcional del recorrido completo —incluidos revisión KYC y pago QR— consulta [DiagramaOnBoarding_Pago.md](DiagramaOnBoarding_Pago.md). La pantalla HTML mostrada arriba no está conectada al mock ni a un backend.
+El diagrama presenta la arquitectura de referencia, con W1 como alcance del producto y W2 como siguiente etapa técnica. Para el detalle funcional del onboarding consulta [DiagramaOnBoarding_Pago.md](DiagramaOnBoarding_Pago.md). El dashboard Angular mostrado arriba no está conectado al backend ni al mock.
 
 ![Arquitectura de referencia del MVP Wallet W1 y W2](arquitectura-w1-w2.svg)
 
@@ -48,16 +38,16 @@ La meta de producto es reducir la mediana de finalización del onboarding de 8 a
 
 ## Qué demuestra hoy
 
-- Una pantalla adaptable de registro e inicio de sesión.
-- Validaciones locales de campos y una vista de bienvenida.
-- Una experiencia visual basada en datos sintéticos.
+- Un dashboard Angular adaptable para la vista posterior al inicio de sesión.
+- Resumen de saldo, accesos rápidos y movimientos de ejemplo.
+- Una interfaz visual con datos sintéticos.
 
-El prototipo no consulta el mock, no persiste datos, no verifica identidades, no genera eventos analíticos y no ejecuta pagos. Los movimientos de la pantalla de bienvenida son ejemplos ficticios y no afectan el saldo.
+El dashboard no implementa el onboarding W1 ni consulta el mock o el backend. No persiste datos, no verifica identidades, no genera eventos analíticos y no ejecuta pagos. Los importes y movimientos son ficticios.
 
 
 ## Probar la demo
 
-La demo contiene tres componentes independientes: el backend de referencia en `8089`, el dashboard Angular en `4200` y el prototipo W1 estático en `8090`. Las interfaces no están conectadas al backend ni entre sí.
+Para la presentación, inicia el dashboard Angular en `4200`. El backend de referencia puede levantarse en `8089`, pero el dashboard no lo consume.
 
 ### Backend Quarkus
 
@@ -81,19 +71,7 @@ npm ci
 npm start
 ```
 
-Abre `http://localhost:4200`. Este dashboard es una demostración independiente.
-
-### Prototipo W1 estático
-
-Desde la raíz del repositorio, en otra terminal:
-
-```powershell
-py -m http.server 8090
-```
-
-Abre `http://localhost:8090/index_W1.html`. También puedes abrir `index_W1.html` directamente como archivo, sin iniciar este servidor.
-
-Usa únicamente datos ficticios y un identificador `TEST-`; no ingreses DNI, datos personales reales ni credenciales utilizadas en otros servicios.
+Abre `http://localhost:4200`. Esta es la interfaz que se usará en la demo; utiliza datos de ejemplo y no requiere el backend para mostrarse.
 
 ## Documentación técnica
 
